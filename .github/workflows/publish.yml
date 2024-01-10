@@ -11,6 +11,7 @@ jobs:
       contents: write
       packages: none
       pull-requests: write
+      issues: read
     steps:
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@master

@@ -9,8 +9,10 @@ class Systemslab < Formula
 
   bottle do
     root_url "https://github.com/iopsystems/homebrew-iop/releases/download/systemslab-0.0.61"
-    sha256 cellar: :any,                 ventura:      "067193ecb7fc8748e2fa39d6f23edf777634b4cd2a91ce5a23274f93a0d8c993"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "ad2912194b9f9facace805490813469dc8b2c865e2a62589cbc0d1acef57ec07"
+    rebuild 1
+    sha256 cellar: :any,                 arm64_ventura: "84c497ce5526c31f944a51529ebb9d4c2d2e27399a53622dbb50ffb381b7f293"
+    sha256 cellar: :any,                 ventura:       "7ac72aecb3bd938315b3846e2a39c63cfe4941a8dfeb4de397b3330b89a6a129"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a14029bb1d9efa3cac375f46455d5e7df3dec401077036e8d134c6c491d57da4"
   end
 
   depends_on "pkg-config" => :build

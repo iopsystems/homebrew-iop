@@ -5,6 +5,7 @@ class Systemslab < Formula
   homepage  "https://iop.systems"
   url       "https://github.com/iopsystems/systemslab.git",
     tag:    "v0.0.61"
+  license   :cannot_represent
 
   bottle do
     root_url "https://github.com/iopsystems/homebrew-iop/releases/download/systemslab-0.0.61"

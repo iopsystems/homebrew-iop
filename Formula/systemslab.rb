@@ -6,6 +6,12 @@ class Systemslab < Formula
   url       "https://github.com/iopsystems/systemslab.git",
     tag:    "v0.0.61"
 
+  bottle do
+    root_url "https://github.com/iopsystems/homebrew-iop/releases/download/systemslab-0.0.61"
+    sha256 cellar: :any,                 ventura:      "067193ecb7fc8748e2fa39d6f23edf777634b4cd2a91ce5a23274f93a0d8c993"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "ad2912194b9f9facace805490813469dc8b2c865e2a62589cbc0d1acef57ec07"
+  end
+
   depends_on "pkg-config" => :build
   depends_on "rust" => :build
 

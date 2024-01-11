@@ -19,6 +19,9 @@ an issue and we'll add it to CI.
 > You'll need to set the `HOMEBREW_GITHUB_API_TOKEN` environment variable to
 > a github token that has access to the relevant repositories before you can
 > build from source.
+>
+> If using a class access token then you'll need to enable the various `repo`
+> scopes in order to access private github repos.
 
 ## Documentation
 

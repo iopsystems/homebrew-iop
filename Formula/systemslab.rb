@@ -5,7 +5,7 @@ class Systemslab < Formula
   homepage  "https://iop.systems"
   url       "https://github.com/iopsystems/systemslab.git",
     tag:     "v0.0.61",
-    revison: "8c21e78c2ed0aeda461acbdcefa8074b5a598f70"
+    revison: "bc6092a045c841ba943a84a5c9dec5be754cbed4"
   license   :cannot_represent
 
   bottle do

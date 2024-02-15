@@ -19,7 +19,7 @@ class Systemslab < Formula
   depends_on "rust" => :build
 
   depends_on "bzip2"
-  depends_on "openssl"
+  depends_on "openssl@3"
   depends_on "xz"
 
   def install

@@ -25,7 +25,7 @@ jobs:
               const owner = context.payload.repository.owner.login;
               const repo = context.payload.repository.name;
 
-              const issue = github.issues.get({
+              const issue = github.rest.issues.get({
                 owner,
                 repo,
                 issue_number: pr.number
@@ -36,7 +36,7 @@ jobs:
                 continue;
               }
 
-              github.issues.addLabels({
+              github.rest.issues.addLabels({
                 owner,
                 repo,
                 issue_number: pr.number,

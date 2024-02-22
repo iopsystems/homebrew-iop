@@ -1,0 +1,47 @@
+name: autotag
+
+on:
+  workflow_run:
+    workflows: 
+      - brew test-bot
+    types:
+      - completed
+    branches-ignore:
+      - main
+
+jobs:
+  autotag:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            console.log(JSON.stringify(context, null, '  '));
+
+            for (const pr in context.payload.workflow_run.pull_requests) {
+              const owner = context.payload.repository.owner.login;
+              const repo = context.payload.repository.name;
+
+              const issue = github.issues.get({
+                owner,
+                repo,
+                issue_number: pr.number
+              });
+
+              const labels = issue.labels.map(label => label.name);
+              if (!labels.includes("autopull")) {
+                continue;
+              }
+
+              github.issues.addLabels({
+                owner,
+                repo,
+                issue_number: pr.number,
+                labels: [{
+                  name: "pr-pull"
+                }]
+              });
+            }

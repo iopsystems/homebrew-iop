@@ -9,10 +9,10 @@ class Systemslab < Formula
   license   :cannot_represent
 
   bottle do
-    root_url "https://github.com/iopsystems/homebrew-iop/releases/download/systemslab-0.0.81"
-    sha256 cellar: :any,                 arm64_ventura: "56b00b4cf901fd7b2db0f3d8bb23a45594a4bbcb65c3792afee0b750005f166c"
-    sha256 cellar: :any,                 ventura:       "7d02053e285cd4f18bd5da66e9ea50c5d95abf7bf47724989fea1b49cc45c91a"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "13a7f715b0caa4231fbbd8333e8e98ae0e9766e5c1b18ca9cb7ecf91ff247881"
+    root_url "https://github.com/iopsystems/homebrew-iop/releases/download/systemslab-0.0.82"
+    sha256 cellar: :any,                 arm64_ventura: "c7511529e0691e86defe853a28592d5ffde757035c96e56c2f907c2523051cf0"
+    sha256 cellar: :any,                 ventura:       "fc1acb6888465f794bd68601f8cc080d336e6cec12a1f5e553faad03614eb8ff"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "6d446ab0bc210a49b05cfdd64db8deb4d50c452db31ce67835a19f6a1cf41a62"
   end
 
   depends_on "pkg-config" => :build

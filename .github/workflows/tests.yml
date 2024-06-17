@@ -46,17 +46,8 @@ jobs:
           name: bottles
           path: '*.bottle.*'
 
-  debug:
-    runs-on: ubuntu-latest
-    env:
-      EVENT_NAME: ${{ github.event_name }}
-      BASE_REF: ${{ github.base_ref }}
-      REPOSITORY: ${{ github.repository }}
-    steps:
-      - run: "true"
-
   autotag:
-    if: github.event_name == 'pull_request' && github.base_ref == 'refs/heads/main' && github.repository == 'iopsystems/homebrew-iop'
+    if: github.event_name == 'pull_request' && github.base_ref == 'main' && github.repository == 'iopsystems/homebrew-iop'
     runs-on: ubuntu-latest
     needs:
       - test-bot

@@ -45,3 +45,14 @@ jobs:
         with:
           name: bottles
           path: '*.bottle.*'
+
+  autotag:
+    if: github.event_name == 'pull_request' && github.base_ref == 'refs/heads/main' && github.repository == 'iopsystems/homebrew-iop'
+    runs-on: ubuntu-latest
+    needs:
+      - test-bot
+    env:
+      PR: ${{ github.event.pull_request.number }}
+    steps:
+      - name: Add the pr-pull label to the issue
+        run: gh issue edit "$PR" --add-label "pr-pull"

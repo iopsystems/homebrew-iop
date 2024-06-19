@@ -4,8 +4,8 @@ class Systemslab < Formula
   desc      "CLI for interacting with SystemsLab servers"
   homepage  "https://iop.systems"
   url       "https://github.com/iopsystems/systemslab.git",
-    tag:      "v0.0.92",
-    revision: "6bb4ca8efbf135812e92ae2d3298d932fd2e637a"
+    tag:      "v0.0.93",
+    revision: "e8bb14cbc96a09a3dd3caacba9e90b89ed085e23"
   license   :cannot_represent
 
   bottle do

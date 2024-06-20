@@ -55,5 +55,6 @@ jobs:
       PR: ${{ github.event.pull_request.number }}
       GH_TOKEN: ${{ github.token }}
     steps:
+      - uses: actions/checkout@v4
       - name: Add the pr-pull label to the issue
         run: gh issue edit "$PR" --add-label "pr-pull"

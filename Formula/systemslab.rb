@@ -1,9 +1,20 @@
 # Brew formula for the SystemsLab CLI.
 
+class SystemsLabDownloadStrategy < GitHubGitDownloadStrategy
+  def initialize(url, name, version, **meta)
+    super
+  end
+
+  def submodules?
+    false
+  end
+end
+
 class Systemslab < Formula
   desc      "CLI for interacting with SystemsLab servers"
   homepage  "https://iop.systems"
   url       "https://github.com/iopsystems/systemslab.git",
+    using:      SystemsLabDownloadStrategy,
     tag:        "v0.0.95",
     revision:   "34c4ddd7b75bc1773ed1503c3c6498d5de7279d1",
     submodules: false

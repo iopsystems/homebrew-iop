@@ -1,10 +1,6 @@
 # Brew formula for the SystemsLab CLI.
 
 class SystemsLabDownloadStrategy < GitHubGitDownloadStrategy
-  def initialize(url, name, version, **meta)
-    super
-  end
-
   def submodules?
     false
   end

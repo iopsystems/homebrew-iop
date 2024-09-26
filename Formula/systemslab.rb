@@ -11,8 +11,8 @@ class Systemslab < Formula
   homepage  "https://iop.systems"
   url       "https://github.com/iopsystems/systemslab.git",
     using:    SystemsLabDownloadStrategy,
-    tag:      "v0.0.98",
-    revision: "5f1ec974506c757a87c4654046790749342628de"
+    tag:      "v0.0.100",
+    revision: "e818576659a38be3b29a8250469c1efb3b8df7a5"
   license   :cannot_represent
 
   bottle do
@@ -22,6 +22,7 @@ class Systemslab < Formula
     sha256 cellar: :any_skip_relocation, x86_64_linux:  "7d83a8a2c650d73af5917303cd05d14f05f6a2594782fd3be4973d0d6285dcc9"
   end
 
+  depends_on "go" => :build
   depends_on "pkg-config" => :build
   depends_on "rust" => :build
 

@@ -54,6 +54,7 @@ jobs:
       - test-bot
     permissions:
       issues: write
+      pull-requests: write
     env:
       PR: ${{ github.event.pull_request.number }}
       GH_TOKEN: ${{ github.token }}

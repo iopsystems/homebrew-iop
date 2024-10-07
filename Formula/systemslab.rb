@@ -16,11 +16,11 @@ class Systemslab < Formula
   license   :cannot_represent
 
   bottle do
-    root_url "https://github.com/iopsystems/homebrew-iop/releases/download/systemslab-0.0.100"
-    sha256 cellar: :any,                 arm64_sonoma:  "17fd2f10617355ac06cb1a87eac27d2511923bdee9b5724671414c7c629eb3d0"
-    sha256 cellar: :any,                 arm64_ventura: "5df7bca7292489deb0fa64614259ec6d7855a6f8d0ce4724e152a00a39186a56"
-    sha256 cellar: :any,                 ventura:       "536bf17361b22fe23a29ad8807386a902e41ca53afa5b8e75f4de46f79da898c"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8e00bc846cacc502f00a95ed3af469da46c6ffaa390a3a9e5b67dbd4c3d22040"
+    root_url "https://github.com/iopsystems/homebrew-iop/releases/download/systemslab-0.0.101"
+    sha256 cellar: :any,                 arm64_sonoma:  "7feb37522584b0cbc6bba4c595775372679f8447567058b1948893e15c8513da"
+    sha256 cellar: :any,                 arm64_ventura: "9581545bdff16376bad67dca9a17da313f20646b4147cef387fae1ec2204ab7b"
+    sha256 cellar: :any,                 ventura:       "d81ad4629fa67eec825a54ee6960abfbfa7f9438336b42eaf88af3ddcd22ba1c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c5063b0cae32eeba07b79674b0214100b21bbc703285119d410894d0f5bff232"
   end
 
   depends_on "go" => :build

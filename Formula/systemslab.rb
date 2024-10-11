@@ -1,6 +1,6 @@
 # Brew formula for the SystemsLab CLI.
 
-class SystemsLabDownloadStrategy < GitHubGitDownloadStrategy
+class SystemsLabDownloadStrategy < GitDownloadStrategy
   def submodules?
     false
   end
@@ -39,7 +39,14 @@ class Systemslab < Formula
       "--locked",
       "--root", prefix
 
+    system prefix/"bin"/"systemslab", "completions", "bash", "-o", "systemslab"
+    system prefix/"bin"/"systemslab", "completions", "fish", "-o", "systemslab.fish"
+    system prefix/"bin"/"systemslab", "completions", "zsh", "-o", "_systemslab"
+
     pkgshare.install "crates/cli/jsonnet/systemslab.libsonnet"
+    bash_completion.install "systemslab"
+    fish_completion.install "systemslab.fish"
+    zsh_completion.install "_systemslab"
   end
 
   test do

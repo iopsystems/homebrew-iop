@@ -13,8 +13,6 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
-
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@master
 

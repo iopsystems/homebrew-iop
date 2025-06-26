@@ -16,6 +16,7 @@ jobs:
           # The only arm64 runner available for MacOS is the xlarge one
           - macos-13-xlarge
           - macos-14
+          - macos-15
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up Homebrew

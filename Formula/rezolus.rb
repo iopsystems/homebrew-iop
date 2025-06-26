@@ -8,6 +8,7 @@ class Rezolus < Formula
     revision: "946dbc675733bfd15050ca2d7dfa443033cbe912"
   license any_of: ["Apache-2.0", "MIT"]
 
+  depends_on "llvm" => :build
   depends_on "protobuf" => :build
   depends_on "rust" => :build
 

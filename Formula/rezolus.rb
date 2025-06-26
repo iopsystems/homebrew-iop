@@ -1,7 +1,7 @@
 # Brew formula for the SystemsLab CLI.
 
 class Rezolus < Formula
-  desc      "High-resolution systems telemetry, including multiple recorders and a viewer."
+  desc      "High-resolution systems telemetry, including multiple recorders and a viewer"
   homepage  "https://rezolus.com"
   url       "https://github.com/iopsystems/rezolus.git",
     tag:      "v5.1.0",

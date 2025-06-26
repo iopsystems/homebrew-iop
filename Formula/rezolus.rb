@@ -11,6 +11,8 @@ class Rezolus < Formula
   depends_on "llvm" => :build
   depends_on "protobuf" => :build
   depends_on "rust" => :build
+  depends_on "libelf"
+  depends_on "zlib"
 
   def install
     ENV["CC"] = Formula["llvm"].opt_bin/"clang"

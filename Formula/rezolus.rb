@@ -13,6 +13,8 @@ class Rezolus < Formula
   depends_on "rust" => :build
 
   def install
+    ENV["CC"] = Formula["llvm"].opt_bin/"clang"
+    ENV["CXX"] = Formula["llvm"].opt_bin/"clang++"
     system "cargo", "install", *std_cargo_args
   end
 

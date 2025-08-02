@@ -4,7 +4,7 @@ class Rezolus < Formula
   desc      "High-resolution systems telemetry, including multiple recorders and a viewer"
   homepage  "https://rezolus.com"
   url       "https://github.com/iopsystems/rezolus.git",
-    tag:      "v5.1.0",
+    tag:      "v5.2.2",
     revision: "946dbc675733bfd15050ca2d7dfa443033cbe912"
   license any_of: ["Apache-2.0", "MIT"]
 

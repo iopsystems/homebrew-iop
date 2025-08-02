@@ -5,7 +5,7 @@ class Rezolus < Formula
   homepage  "https://rezolus.com"
   url       "https://github.com/iopsystems/rezolus.git",
     tag:      "v5.2.2",
-    revision: "946dbc675733bfd15050ca2d7dfa443033cbe912"
+    revision: "5484b0abc6bfdc45e2b463fa15091dc27cbfac0a"
   license any_of: ["Apache-2.0", "MIT"]
 
   depends_on "llvm" => :build

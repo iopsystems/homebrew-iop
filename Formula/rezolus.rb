@@ -1,12 +1,20 @@
-# Brew formula for the SystemsLab CLI.
+# Brew formula for Rezolus.
 
 class Rezolus < Formula
   desc      "High-resolution systems telemetry, including multiple recorders and a viewer"
   homepage  "https://rezolus.com"
-  url       "https://github.com/iopsystems/rezolus.git",
-    tag:      "v5.2.2",
-    revision: "5484b0abc6bfdc45e2b463fa15091dc27cbfac0a"
+  url "https://github.com/iopsystems/rezolus/archive/refs/tags/v5.5.0.tar.gz"
+  sha256 "12a23235223b8d967f1a987e3c7ace3a8af2e2fcaaebc97c16cee6931aa2849e"
   license any_of: ["Apache-2.0", "MIT"]
+
+  bottle do
+    root_url "https://github.com/iopsystems/homebrew-iop/releases/download/rezolus-5.2.2"
+    sha256 cellar: :any,                 arm64_sequoia: "PLACEHOLDER"
+    sha256 cellar: :any,                 arm64_sonoma:  "PLACEHOLDER"
+    sha256 cellar: :any,                 arm64_ventura: "PLACEHOLDER"
+    sha256 cellar: :any,                 ventura:       "PLACEHOLDER"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "PLACEHOLDER"
+  end
 
   depends_on "llvm" => :build
   depends_on "protobuf" => :build

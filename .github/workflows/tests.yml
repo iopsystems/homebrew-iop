@@ -11,10 +11,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - ubuntu-22.04
-          - macos-13
-          # The only arm64 runner available for MacOS is the xlarge one
-          - macos-13-xlarge
+          - ubuntu-24.04
           - macos-14
           - macos-15
     runs-on: ${{ matrix.os }}

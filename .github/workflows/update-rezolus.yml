@@ -1,0 +1,71 @@
+name: Update Rezolus Formula
+
+on:
+  schedule:
+    # Check for new releases daily at 08:00 UTC
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for new Rezolus release
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Get the latest release tag from iopsystems/rezolus
+          LATEST=$(gh api repos/iopsystems/rezolus/releases/latest --jq '.tag_name')
+          echo "latest_tag=$LATEST" >> "$GITHUB_OUTPUT"
+
+          # Extract version without the leading 'v'
+          LATEST_VERSION="${LATEST#v}"
+          echo "latest_version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
+
+          # Get the current version from the formula
+          CURRENT_VERSION=$(grep -oP '^\s*url.*tags/v\K[0-9]+\.[0-9]+\.[0-9]+' Formula/rezolus.rb)
+          echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+
+          if [ "$LATEST_VERSION" = "$CURRENT_VERSION" ]; then
+            echo "up_to_date=true" >> "$GITHUB_OUTPUT"
+            echo "Formula is already up to date (v$CURRENT_VERSION)"
+          else
+            echo "up_to_date=false" >> "$GITHUB_OUTPUT"
+            echo "New version available: v$CURRENT_VERSION -> v$LATEST_VERSION"
+          fi
+
+      - name: Update formula
+        if: steps.check.outputs.up_to_date == 'false'
+        env:
+          LATEST_VERSION: ${{ steps.check.outputs.latest_version }}
+          LATEST_TAG: ${{ steps.check.outputs.latest_tag }}
+          CURRENT_VERSION: ${{ steps.check.outputs.current_version }}
+        run: |
+          # Download the new tarball and compute its sha256
+          TARBALL_URL="https://github.com/iopsystems/rezolus/archive/refs/tags/${LATEST_TAG}.tar.gz"
+          SHA256=$(curl -sL "$TARBALL_URL" | sha256sum | awk '{print $1}')
+
+          # Update the url and sha256 in the formula
+          sed -i "s|archive/refs/tags/v${CURRENT_VERSION}.tar.gz|archive/refs/tags/${LATEST_TAG}.tar.gz|" Formula/rezolus.rb
+          sed -i "s/sha256 \"[a-f0-9]\{64\}\"/sha256 \"${SHA256}\"/" Formula/rezolus.rb
+
+          # Remove the bottle block — new bottles will be built by test-bot
+          sed -i '/^  bottle do$/,/^  end$/d' Formula/rezolus.rb
+
+      - name: Create pull request
+        if: steps.check.outputs.up_to_date == 'false'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.API_TOKEN }}
+          commit-message: "rezolus: update to ${{ steps.check.outputs.latest_version }}"
+          branch: update-rezolus-${{ steps.check.outputs.latest_version }}
+          title: "rezolus: update to ${{ steps.check.outputs.latest_version }}"
+          body: |
+            Automated update of the Rezolus formula to [${{ steps.check.outputs.latest_tag }}](https://github.com/iopsystems/rezolus/releases/tag/${{ steps.check.outputs.latest_tag }}).
+          delete-branch: true

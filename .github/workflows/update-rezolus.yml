@@ -53,10 +53,7 @@ jobs:
 
           # Update the url and sha256 in the formula
           sed -i "s|archive/refs/tags/v${CURRENT_VERSION}.tar.gz|archive/refs/tags/${LATEST_TAG}.tar.gz|" Formula/rezolus.rb
-          sed -i "s/sha256 \"[a-f0-9]\{64\}\"/sha256 \"${SHA256}\"/" Formula/rezolus.rb
-
-          # Remove the bottle block — new bottles will be built by test-bot
-          sed -i '/^  bottle do$/,/^  end$/d' Formula/rezolus.rb
+          sed -i "/^  url /{ n; s/sha256 \"[a-f0-9]\{64\}\"/sha256 \"${SHA256}\"/; }" Formula/rezolus.rb
 
       - name: Create pull request
         if: steps.check.outputs.up_to_date == 'false'

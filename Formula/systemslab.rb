@@ -11,8 +11,8 @@ class Systemslab < Formula
   homepage  "https://iop.systems"
   url       "https://github.com/iopsystems/systemslab.git",
     using:    SystemsLabDownloadStrategy,
-    tag:      "v141.0.0",
-    revision: "f4d7a8e895c3540f308e2d3371af4110a7073c4b"
+    tag:      "v142.0.0",
+    revision: "f29ac8eb78dd1fa41b6fff3308e2fd46c0f99643"
   license   :cannot_represent
 
   bottle do

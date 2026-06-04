@@ -16,6 +16,12 @@ jobs:
           - macos-15
           - macos-14
     runs-on: ${{ matrix.os }}
+    env:
+      # Ubuntu 24.04 GitHub runners restrict unprivileged user namespaces,
+      # which breaks rootless bwrap and makes `brew doctor` (run during
+      # `brew test-bot --only-setup`) fail with a missing Bubblewrap error.
+      # Disable the Linux sandbox as recommended by Homebrew. No-op on macOS.
+      HOMEBREW_NO_SANDBOX_LINUX: 1
     steps:
       - name: Set up Homebrew
         id: set-up-homebrew

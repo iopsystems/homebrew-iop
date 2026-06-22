@@ -20,8 +20,8 @@ class Rezolus < Formula
   depends_on "zlib"
 
   def install
-    ENV["CC"] = Formula["llvm"].opt_bin/"clang"
-    ENV["CXX"] = Formula["llvm"].opt_bin/"clang++"
+    ENV["CC"] = formula_opt_bin("llvm")/"clang"
+    ENV["CXX"] = formula_opt_bin("llvm")/"clang++"
     system "cargo", "install", *std_cargo_args
   end
 

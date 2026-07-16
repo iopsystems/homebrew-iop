@@ -9,6 +9,13 @@ class SkillsMcp < Formula
     tag: "v0.1.0"
   license any_of: ["Apache-2.0", "MIT"]
 
+  bottle do
+    root_url "https://github.com/iopsystems/homebrew-iop/releases/download/skills-mcp-0.1.0"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "f416739bb5dafcf9bb6a737d8552914199e27dd06e45edf42fc3dc6c52562f52"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "b0a929b605557e567c64d0b515299af67ff36402e79d863133180565db407bc5"
+    sha256 cellar: :any,                 x86_64_linux:  "72b3ae67b9aeea76787b7d1a079393b27777d722ec096df474f91c80b937bf6a"
+  end
+
   depends_on "rust" => :build
 
   def install

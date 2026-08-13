@@ -1,0 +1,68 @@
+name: Update skills-mcp Formula
+
+on:
+  # Check for new releases daily at 08:15 UTC, offset from the Rezolus check so
+  # the two updaters do not open pull requests in the same minute.
+  schedule:
+    - cron: "15 8 * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for new skills-mcp release
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Get the latest release tag from iopsystems/skills-mcp
+          LATEST=$(gh api repos/iopsystems/skills-mcp/releases/latest --jq '.tag_name')
+          echo "latest_tag=$LATEST" >> "$GITHUB_OUTPUT"
+
+          # Extract version without the leading 'v'
+          LATEST_VERSION="${LATEST#v}"
+          echo "latest_version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
+
+          # skills-mcp.rb builds from a git tag rather than a source tarball, so
+          # the current version lives in the `tag:` argument and there is no
+          # source checksum to recompute.
+          CURRENT_VERSION=$(grep -oP '^\s*tag: "v\K[0-9]+\.[0-9]+\.[0-9]+' Formula/skills-mcp.rb)
+          echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+
+          if [ "$LATEST_VERSION" = "$CURRENT_VERSION" ]; then
+            echo "up_to_date=true" >> "$GITHUB_OUTPUT"
+            echo "Formula is already up to date (v$CURRENT_VERSION)"
+          else
+            echo "up_to_date=false" >> "$GITHUB_OUTPUT"
+            echo "New version available: v$CURRENT_VERSION -> v$LATEST_VERSION"
+          fi
+
+      - name: Update formula
+        if: steps.check.outputs.up_to_date == 'false'
+        env:
+          LATEST_TAG: ${{ steps.check.outputs.latest_tag }}
+          CURRENT_VERSION: ${{ steps.check.outputs.current_version }}
+        run: |
+          # Point the formula at the new tag. The stale `bottle do` block is
+          # left alone on purpose: `brew test-bot` rebuilds the bottles for this
+          # pull request and `brew pr-pull` rewrites the block from them.
+          sed -i "s|tag: \"v${CURRENT_VERSION}\"|tag: \"${LATEST_TAG}\"|" Formula/skills-mcp.rb
+          grep -n 'tag:' Formula/skills-mcp.rb
+
+      - name: Create pull request
+        if: steps.check.outputs.up_to_date == 'false'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.API_TOKEN }}
+          commit-message: "skills-mcp: update to ${{ steps.check.outputs.latest_version }}"
+          branch: update-skills-mcp-${{ steps.check.outputs.latest_version }}
+          title: "skills-mcp: update to ${{ steps.check.outputs.latest_version }}"
+          body: |
+            Automated update of the skills-mcp formula to [${{ steps.check.outputs.latest_tag }}](https://github.com/iopsystems/skills-mcp/releases/tag/${{ steps.check.outputs.latest_tag }}).
+          delete-branch: true

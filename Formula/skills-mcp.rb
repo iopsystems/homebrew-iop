@@ -10,10 +10,10 @@ class SkillsMcp < Formula
   license any_of: ["Apache-2.0", "MIT"]
 
   bottle do
-    root_url "https://github.com/iopsystems/homebrew-iop/releases/download/skills-mcp-0.3.0"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "120a9523ce0d4d8cd0947113336b69fe58404faa19c4939dea035d8cd3506721"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "cfc39144503ed53bfd0db11d98ff2444ee649fba4fdd951e2869c93c54e7f9b6"
-    sha256 cellar: :any,                 x86_64_linux:  "dc2421278ad486179ca7a3bdecf2a1ad64e7c307a45e8ce687bdef617c0e3c1f"
+    root_url "https://github.com/iopsystems/homebrew-iop/releases/download/skills-mcp-0.4.0"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "a0d01b8c3fbae51982d1030488aebc2bba373189aa430cf842754aca59e91b4e"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "d047e1b088bf8fe8c98388303b655f27d32780c9c4948de9dbaa3ec7e95fe105"
+    sha256 cellar: :any,                 x86_64_linux:  "ef0b9ea87fc95c539bbcc77b23e674e38b61e0b194e208da490050ee601e8ab9"
   end
 
   depends_on "rust" => :build

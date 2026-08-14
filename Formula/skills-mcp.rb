@@ -6,7 +6,7 @@ class SkillsMcp < Formula
   # Built from the tagged source. `brew test-bot` produces the bottles and
   # `brew pr-pull` fills in the `bottle do` block below on publish.
   url "https://github.com/iopsystems/skills-mcp.git",
-    tag: "v0.4.0"
+    tag: "v0.4.1"
   license any_of: ["Apache-2.0", "MIT"]
 
   bottle do

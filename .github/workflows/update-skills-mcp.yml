@@ -1,8 +1,14 @@
 name: Update skills-mcp Formula
 
 on:
-  # Check for new releases daily at 08:15 UTC, offset from the Rezolus check so
-  # the two updaters do not open pull requests in the same minute.
+  # skills-mcp sends this the moment its release job finishes, so a formula
+  # bump takes about a minute rather than up to a day.
+  repository_dispatch:
+    types: [skills-mcp-released]
+  # The daily check is now a backstop for a dispatch that never arrived —
+  # an expired token, a failed release job — rather than the way releases
+  # normally land. Offset from the Rezolus check so the two updaters do not
+  # open pull requests in the same minute.
   schedule:
     - cron: "15 8 * * *"
   workflow_dispatch:
@@ -20,9 +26,12 @@ jobs:
         id: check
         env:
           GH_TOKEN: ${{ github.token }}
+          DISPATCHED_TAG: ${{ github.event.client_payload.tag }}
         run: |
-          # Get the latest release tag from iopsystems/skills-mcp
-          LATEST=$(gh api repos/iopsystems/skills-mcp/releases/latest --jq '.tag_name')
+          # A dispatched run already knows which release it is for. Asking the
+          # API instead would race the release that was published seconds ago.
+          # Cron and manual runs carry no payload and ask.
+          LATEST="${DISPATCHED_TAG:-$(gh api repos/iopsystems/skills-mcp/releases/latest --jq '.tag_name')}"
           echo "latest_tag=$LATEST" >> "$GITHUB_OUTPUT"
 
           # Extract version without the leading 'v'

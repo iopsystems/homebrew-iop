@@ -3,8 +3,8 @@
 class Rezolus < Formula
   desc "High-resolution systems telemetry, including multiple recorders and a viewer"
   homepage "https://rezolus.com"
-  url "https://github.com/iopsystems/rezolus/archive/refs/tags/v5.25.0.tar.gz"
-  sha256 "8ca77cf51c1a45f6be15ae542ce0162fbdd4086d2fbe821a7f3801480ae0e8df"
+  url "https://github.com/iopsystems/rezolus/archive/refs/tags/v5.25.1.tar.gz"
+  sha256 "5535dc5cee7bc73703bdc370c941fb4fce9169f2858b183e8ca7b48f793ef38b"
   license any_of: ["Apache-2.0", "MIT"]
 
   bottle do

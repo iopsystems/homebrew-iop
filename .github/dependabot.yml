@@ -1,0 +1,14 @@
+version: 2
+updates:
+  # Keep the pinned Homebrew/actions SHAs current. Other actions are referenced
+  # by tag and are updated by hand.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    allow:
+      - dependency-name: "Homebrew/actions*"
+    groups:
+      homebrew-actions:
+        patterns:
+          - "Homebrew/actions*"

@@ -6,30 +6,44 @@ on:
       - main
   pull_request:
 
+permissions: {}
+
+defaults:
+  run:
+    shell: bash -xeuo pipefail {0}
+
 jobs:
   test-bot:
     strategy:
       matrix:
         os:
-          - ubuntu-24.04
           - macos-15
           - macos-14
+        include:
+          # Homebrew's sandbox on Linux needs more than a bare GitHub runner
+          # provides, so (like upstream `brew tap-new` taps) build Linux
+          # bottles inside Homebrew's own privileged container.
+          - os: ubuntu-latest
+            container:
+              image: ghcr.io/homebrew/brew:main
+              options: --privileged
     runs-on: ${{ matrix.os }}
-    env:
-      # Ubuntu 24.04 GitHub runners restrict unprivileged user namespaces,
-      # which breaks rootless bwrap and makes `brew doctor` (run during
-      # `brew test-bot --only-setup`) fail with a missing Bubblewrap error.
-      # Disable the Linux sandbox as recommended by Homebrew. No-op on macOS.
-      HOMEBREW_NO_SANDBOX_LINUX: 1
+    container: ${{ fromJSON(toJSON(matrix.container)) }}
+    permissions:
+      actions: read
+      checks: read
+      contents: read
+      pull-requests: read
     steps:
       - name: Set up Homebrew
         id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@main
+        uses: Homebrew/actions/setup-homebrew@e99025eb970cfa124b8284a35463d87426917478 # 2026.09.28.1
         with:
+          # Needs access to the private repositories some formulae build from.
           token: ${{ secrets.API_TOKEN }}
 
       - name: Cache Homebrew Bundler RubyGems
-        uses: actions/cache@v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ steps.set-up-homebrew.outputs.gems-path }}
           key: ${{ matrix.os }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
@@ -46,7 +60,7 @@ jobs:
 
       - name: Upload bottles as artifact
         if: always() && github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: bottles_${{ matrix.os }}
           path: '*.bottle.*'

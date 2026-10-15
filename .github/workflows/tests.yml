@@ -42,6 +42,18 @@ jobs:
           # Needs access to the private repositories some formulae build from.
           token: ${{ secrets.API_TOKEN }}
 
+      # Homebrew fetches Git sources with $HOME set to the user's real home
+      # directory, but in the container setup-homebrew writes the token to the
+      # runner's $HOME (/github/home) instead. Copy it across so private
+      # repositories can still be cloned.
+      - name: Expose the access token to Homebrew's Git
+        if: matrix.container
+        run: |
+          set +x
+          key="http.${GITHUB_SERVER_URL}/.extraheader"
+          home="$(getent passwd "$(id -u)" | cut -d: -f6)"
+          git config --file "$home/.gitconfig" "$key" "$(git config --global --get "$key")"
+
       - name: Cache Homebrew Bundler RubyGems
         uses: actions/cache@v6
         with:

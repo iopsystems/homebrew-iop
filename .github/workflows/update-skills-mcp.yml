@@ -31,9 +31,9 @@ jobs:
           echo "latest_version=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
 
           # skills-mcp.rb builds from a git tag rather than a source tarball, so
-          # the current version lives in the `tag:` argument and there is no
-          # source checksum to recompute.
-          CURRENT_VERSION=$(grep -oP '^\s*tag: "v\K[0-9]+\.[0-9]+\.[0-9]+' Formula/skills-mcp.rb)
+          # the current version lives in the `tag:` argument and the source is
+          # pinned by the tag's commit in `revision:` instead of a checksum.
+          CURRENT_VERSION=$(grep -oP '^\s*tag:\s+"v\K[0-9]+\.[0-9]+\.[0-9]+' Formula/skills-mcp.rb)
           echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
 
           if [ "$LATEST_VERSION" = "$CURRENT_VERSION" ]; then
@@ -53,8 +53,18 @@ jobs:
           # Point the formula at the new tag. The stale `bottle do` block is
           # left alone on purpose: `brew test-bot` rebuilds the bottles for this
           # pull request and `brew pr-pull` rewrites the block from them.
-          sed -i "s|tag: \"v${CURRENT_VERSION}\"|tag: \"${LATEST_TAG}\"|" Formula/skills-mcp.rb
-          grep -n 'tag:' Formula/skills-mcp.rb
+          # `brew audit` requires the commit alongside a git tag. `^{}` resolves
+          # an annotated tag to its commit; a lightweight tag has no such ref.
+          REPO=https://github.com/iopsystems/skills-mcp.git
+          REVISION=$(git ls-remote "$REPO" "refs/tags/${LATEST_TAG}^{}" | cut -f1)
+          if [ -z "$REVISION" ]; then
+            REVISION=$(git ls-remote "$REPO" "refs/tags/${LATEST_TAG}" | cut -f1)
+          fi
+          [[ "$REVISION" =~ ^[0-9a-f]{40}$ ]]
+          [ "$(grep -cE '^\s*revision:\s+"[0-9a-f]{40}"' Formula/skills-mcp.rb)" = 1 ]
+          sed -i -E "s|(tag:\s+)\"v${CURRENT_VERSION}\"|\1\"${LATEST_TAG}\"|" Formula/skills-mcp.rb
+          sed -i -E "s|(revision:\s+)\"[0-9a-f]{40}\"|\1\"${REVISION}\"|" Formula/skills-mcp.rb
+          grep -nE 'tag:|revision:' Formula/skills-mcp.rb
 
       - name: Create pull request
         if: steps.check.outputs.up_to_date == 'false'

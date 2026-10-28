@@ -60,7 +60,7 @@ jobs:
           if [ -z "$REVISION" ]; then
             REVISION=$(git ls-remote "$REPO" "refs/tags/${LATEST_TAG}" | cut -f1)
           fi
-          [[ "$REVISION" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$REVISION" =~ ^[0-9a-f]{40}$ ]] || { echo "::error::cannot resolve ${LATEST_TAG} to a commit"; exit 1; }
           [ "$(grep -cE '^\s*revision:\s+"[0-9a-f]{40}"' Formula/skills-mcp.rb)" = 1 ]
           sed -i -E "s|(tag:\s+)\"v${CURRENT_VERSION}\"|\1\"${LATEST_TAG}\"|" Formula/skills-mcp.rb
           sed -i -E "s|(revision:\s+)\"[0-9a-f]{40}\"|\1\"${REVISION}\"|" Formula/skills-mcp.rb

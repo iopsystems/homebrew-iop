@@ -18,7 +18,6 @@ jobs:
       matrix:
         os:
           - macos-15
-          - macos-14
         include:
           # Homebrew's sandbox on Linux needs more than a bare GitHub runner
           # provides, so (like upstream `brew tap-new` taps) build Linux

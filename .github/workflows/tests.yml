@@ -5,6 +5,9 @@ on:
     branches:
       - main
   pull_request:
+    # The default types plus ready_for_review, so a draft pull request is
+    # autotagged once it is marked ready.
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions: {}
 
@@ -92,9 +95,11 @@ jobs:
 
   autotag:
     # Dependabot PRs only bump actions and have no bottles to publish, so they
-    # are merged normally rather than through `brew pr-pull`.
+    # are merged normally rather than through `brew pr-pull`. Draft PRs are
+    # left alone, since the pr-pull label publishes the PR to main.
     if: >-
       github.event_name == 'pull_request' &&
+      !github.event.pull_request.draft &&
       github.base_ref == 'main' &&
       github.repository == 'iopsystems/homebrew-iop' &&
       github.event.pull_request.user.login != 'dependabot[bot]'

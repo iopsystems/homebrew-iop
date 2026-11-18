@@ -13,9 +13,21 @@ jobs:
   update:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
     steps:
+      # Pull requests opened with GITHUB_TOKEN don't trigger the test
+      # workflows, so open them with a GitHub App token instead.
+      - name: Create a GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.IOPSYSTEMS_AUTOMATION_APPID }}
+          private-key: ${{ secrets.IOPSYSTEMS_AUTOMATION_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: homebrew-iop
+          permission-contents: write
+          permission-pull-requests: write
+
       - uses: actions/checkout@v4
 
       - name: Check for new skills-mcp release
@@ -70,7 +82,7 @@ jobs:
         if: steps.check.outputs.up_to_date == 'false'
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.API_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
           commit-message: "skills-mcp: update to ${{ steps.check.outputs.latest_version }}"
           branch: update-skills-mcp-${{ steps.check.outputs.latest_version }}
           title: "skills-mcp: update to ${{ steps.check.outputs.latest_version }}"

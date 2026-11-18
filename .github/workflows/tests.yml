@@ -34,12 +34,26 @@ jobs:
       contents: read
       pull-requests: read
     steps:
+      # Some formulae (systemslab) build from private repositories, which
+      # GITHUB_TOKEN can't read. Dependabot runs don't get Actions secrets, so
+      # they fall back to GITHUB_TOKEN; they only bump actions and don't build
+      # the private formulae.
+      - name: Create a GitHub App token
+        id: app-token
+        if: github.actor != 'dependabot[bot]'
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.IOPSYSTEMS_AUTOMATION_APPID }}
+          private-key: ${{ secrets.IOPSYSTEMS_AUTOMATION_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: homebrew-iop,systemslab
+          permission-contents: read
+
       - name: Set up Homebrew
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@eb02c69dbabdb66ff183c614f4ce7ab3c077592c # 2026.10.12.1
         with:
-          # Needs access to the private repositories some formulae build from.
-          token: ${{ secrets.API_TOKEN }}
+          token: ${{ steps.app-token.outputs.token || github.token }}
 
       # Homebrew fetches Git sources with $HOME set to the user's real home
       # directory, but in the container setup-homebrew writes the token to the
@@ -87,13 +101,22 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - test-bot
-    permissions:
-      issues: write
-      pull-requests: write
-    env:
-      PR: ${{ github.event.pull_request.number }}
-      GH_TOKEN: ${{ secrets.LABEL_API_TOKEN }}
+    permissions: {}
     steps:
-      - uses: actions/checkout@v4
-      - name: Add the pr-pull label to the issue
-        run: gh issue edit "$PR" --add-label "pr-pull"
+      # Labelling with GITHUB_TOKEN would not trigger the publish workflow, so
+      # use a GitHub App token instead.
+      - name: Create a GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.IOPSYSTEMS_AUTOMATION_APPID }}
+          private-key: ${{ secrets.IOPSYSTEMS_AUTOMATION_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: homebrew-iop
+          permission-pull-requests: write
+
+      - name: Add the pr-pull label to the pull request
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: gh api "repos/$GITHUB_REPOSITORY/issues/$PR/labels" -f "labels[]=pr-pull"

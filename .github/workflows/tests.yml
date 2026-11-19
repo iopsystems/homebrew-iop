@@ -41,6 +41,14 @@ jobs:
       # GITHUB_TOKEN can't read. Dependabot runs don't get Actions secrets, so
       # they fall back to GITHUB_TOKEN; they only bump actions and don't build
       # the private formulae.
+      #
+      # In the container, directories mounted by the runner are owned by the
+      # host user, so the token action can't write its outputs. setup-homebrew
+      # fixes this the same way, but it needs the token so runs later.
+      - name: Give the container user access to the runner's temp directory
+        if: matrix.container && github.actor != 'dependabot[bot]'
+        run: sudo setfacl -Rm "d:u:$(whoami):rwX,u:$(whoami):rwX" "$RUNNER_TEMP"
+
       - name: Create a GitHub App token
         id: app-token
         if: github.actor != 'dependabot[bot]'

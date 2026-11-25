@@ -8,8 +8,8 @@ class Rezolus < Formula
   license any_of: ["Apache-2.0", "MIT"]
 
   bottle do
-    root_url "https://github.com/iopsystems/homebrew-iop/releases/download/rezolus-5.32.0"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "0db9335b42dbdd4d6e34de7a3e1ceac9ca644c6645d3ec068afdc1c380efd805"
+    root_url "https://github.com/iopsystems/homebrew-iop/releases/download/rezolus-5.33.0"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "93d3e25745572182b6a9fcdcc2ea98c6d67493bfcecb2e64e09635c52961488f"
   end
 
   depends_on "llvm" => :build
